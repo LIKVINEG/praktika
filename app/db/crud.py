@@ -20,3 +20,32 @@ def create_book(db: Session, title: str, description: str, price: float, categor
 
 def get_all_books(db: Session):
     return db.query(Book).all()
+
+def get_category_by_id(db: Session, category_id: int):
+    return db.query(Category).filter(Category.id == category_id).first()
+
+def delete_category(db: Session, category_id: int):
+    db_category = db.query(Category).filter(Category.id == category_id).first()
+    if db_category:
+        db.delete(db_category)
+        db.commit()
+    return db_category
+
+def get_book_by_id(db: Session, book_id: int):
+    return db.query(Book).filter(Book.id == book_id).first()
+
+def update_book(db: Session, book_id: int, book_data: dict):
+    db_book = db.query(Book).filter(Book.id == book_id).first()
+    if db_book:
+        for key, value in book_data.items():
+            setattr(db_book, key, value)
+        db.commit()
+        db.refresh(db_book)
+    return db_book
+
+def delete_book(db: Session, book_id: int):
+    db_book = db.query(Book).filter(Book.id == book_id).first()
+    if db_book:
+        db.delete(db_book)
+        db.commit()
+    return db_book
