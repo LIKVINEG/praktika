@@ -49,3 +49,14 @@ def delete_book(db: Session, book_id: int):
         db.delete(db_book)
         db.commit()
     return db_book
+
+def update_category(db: Session, category_id: int, title: str):
+    db_category = db.query(Category).filter(Category.id == category_id).first()
+    if db_category:
+        db_category.title = title
+        db.commit()
+        db.refresh(db_category)
+    return db_category
+
+def get_books_by_category(db: Session, category_id: int):
+    return db.query(Book).filter(Book.category_id == category_id).all()
